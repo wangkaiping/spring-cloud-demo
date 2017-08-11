@@ -1,5 +1,6 @@
 package com.jedi.controller;
 
+import com.jedi.service.HelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +20,10 @@ import org.springframework.web.client.RestTemplate;
 public class ConsumerController {
 
     @Autowired
-    RestTemplate restTemplate;
+    HelloService helloService;
 
     @RequestMapping(value = "ribbon-consumer/{name}", method = RequestMethod.GET)
     public String helloConsumer(@PathVariable String name) {
-        return restTemplate.getForEntity("http://hello-service/hello/{name}", String.class, name).getBody();
+        return helloService.helloService(name);
     }
 }

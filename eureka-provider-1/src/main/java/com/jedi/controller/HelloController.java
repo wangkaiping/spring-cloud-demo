@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,12 +30,18 @@ public class HelloController {
     private DiscoveryClient client;
 
     @RequestMapping(value = "/hello/{name}", method = RequestMethod.GET)
-    public String index(@PathVariable String name) {
+    public String index(@PathVariable String name) throws Exception{
         List<String> services = client.getServices();
 
         for (String service : services) {
             List<ServiceInstance> list = client.getInstances(service);
             for (ServiceInstance instance : list) {
+
+                // 让处理线程等待几秒钟
+                int sleepTime = new Random().nextInt(3000);
+                logger.info("sleepTime : " + sleepTime);
+                Thread.sleep(sleepTime);
+
                 logger.info("/hello, host : " + instance.getHost() + " , service_id : " + instance.getServiceId() + " , port : " + instance.getPort());
             }
         }
